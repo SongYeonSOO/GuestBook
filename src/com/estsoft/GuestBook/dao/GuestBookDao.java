@@ -14,7 +14,7 @@ import com.estsoft.GuestBook.vo.GuestBookVo;
 public class GuestBookDao {
 	private DBConnection dbConnection;
 
-	public  GuestBookDao(DBConnection mySQLWebDBConnection) {
+	public GuestBookDao(DBConnection mySQLWebDBConnection) {
 		this.dbConnection = mySQLWebDBConnection;
 	}
 
@@ -25,13 +25,13 @@ public class GuestBookDao {
 			conn = dbConnection.getConnection();
 			String sql = "INSERT INTO guestbook VALUES(null, ?, now(), ?, password(?))";
 
-			//System.out.println(vo.getFirstName());
+			// System.out.println(vo.getFirstName());
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1,  vo.getName());
+			pstmt.setString(1, vo.getName());
 			pstmt.setString(2, vo.getMessage());
 			pstmt.setString(3, vo.getPasswd());
 			pstmt.executeUpdate();
-			
+
 		} catch (SQLException ex) {
 			System.out.println("Error" + ex);
 			ex.printStackTrace();
@@ -45,20 +45,18 @@ public class GuestBookDao {
 			conn = dbConnection.getConnection();
 			String sql = "DELETE FROM guestbook WHERE no=? AND passwd= password(?)";
 
-			//System.out.println(vo.getFirstName());
+			// System.out.println(vo.getFirstName());
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, vo.getNo());
 			pstmt.setString(2, vo.getPasswd());
 			pstmt.executeUpdate();
-		
-			
+
 		} catch (SQLException ex) {
 			System.out.println("Error" + ex);
 			ex.printStackTrace();
 		}
 	}
-	
-	
+
 	public List<GuestBookVo> getList() {
 		List<GuestBookVo> list = new ArrayList<GuestBookVo>();
 		Connection conn = null;
@@ -70,7 +68,7 @@ public class GuestBookDao {
 
 			String sql = "SELECT no, name, DATE_FORMAT(reg_date, '%Y-%m-%d %h %i %s'), message FROM guestbook ORDER BY reg_date desc";
 			rs = stmt.executeQuery(sql);
-			
+
 			while (rs.next()) {
 				Long no = rs.getLong(1);
 				String name = rs.getString(2);
@@ -82,7 +80,7 @@ public class GuestBookDao {
 				vo.setName(name);
 				vo.setReg_date(reg_date);
 				vo.setMessage(message);
-				
+
 				list.add(vo);
 			}
 
